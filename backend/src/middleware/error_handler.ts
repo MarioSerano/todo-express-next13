@@ -9,7 +9,10 @@ const errorHandlerMiddleware: ErrorRequestHandler = (
   next
 ) => {
   if (!isResponseError(err))
-    throw new Error("error object need to be instance of response error");
+    throw new ResponseError([
+      "internal server error",
+      "problem on the server side",
+    ]);
   res.status(err.status ?? 500);
   res.json({ errors: err.messages[0], errors_description: err.messages[1] });
   next();

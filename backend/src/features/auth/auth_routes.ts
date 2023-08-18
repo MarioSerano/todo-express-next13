@@ -1,22 +1,21 @@
 import { RequestHandler, Router } from "express";
+import expressAsyncHandler from "express-async-handler";
+
 import ResponseError, { isResponseError } from "~/utils/errors/ResponseError";
-import { registerServices } from "./auth_services";
+import successResponse from "~/utils/response/success_response";
+
+import { registerServices, loginServices } from "./auth_services";
 
 const authRoutes = (router: Router) => {
   const authRouter = Router();
   router.use("/auth", authRouter);
 
-  authRouter.post("/register", registerHandler);
+  authRouter.post("/register", expressAsyncHandler(registerHandler));
 
-  authRouter.post("/login", (_, res) => {
-    // TODO: Query params validation
-    // TODO: Get result from services
-    // TODO: Send response back
-    res.send("hello");
-  });
+  authRouter.post("/login", expressAsyncHandler(loginHandler));
 };
 
-const registerHandler: RequestHandler = (req, res) => {
+const registerHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
 
   if (!(username && password)) {
@@ -34,8 +33,8 @@ const registerHandler: RequestHandler = (req, res) => {
   }
 
   try {
-    registerServices(username, password);
-  } catch (e: unknown) {
+    await registerServices(username, password);
+  } catch (e) {
     if (isResponseError(e as Error)) throw e;
     throw new ResponseError([
       "internal server error",
@@ -43,7 +42,23 @@ const registerHandler: RequestHandler = (req, res) => {
     ]);
   }
 
-  res.send("hello register");
+  res.status(201).json(successResponse("successfully registered user!"));
+};
+
+const loginHandler: RequestHandler = async (req, res) => {
+  const { username, password } = req.body;
+  if (!(username && password)) {
+    throw new ResponseError(["invalid request", "username field not filled"]);
+  }
+  try {
+    await loginServices(username, password);
+  } catch (e) {
+    if (isResponseError(e as Error)) throw e;
+    throw new ResponseError([
+      "internal server error",
+      "problem on the server side",
+    ]);
+  }
 };
 
 export default authRoutes;

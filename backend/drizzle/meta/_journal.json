@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1692343897014,
+      "tag": "0000_lumpy_silver_fox",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1692346396978,
+      "tag": "0001_nasty_fat_cobra",
+      "breakpoints": true
+    }
+  ]
+}

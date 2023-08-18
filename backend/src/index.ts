@@ -1,11 +1,12 @@
-import express, { ErrorRequestHandler } from "express";
+// MS: Finish dotenv loading first
+import express from "express";
 import * as dotenv from "dotenv";
 import path from "path";
-
-import v1Routes from "./routes/v1_routes";
-import errorHandlerMiddleware from "./middleware/error_handler";
-
 dotenv.config({ path: path.resolve(__dirname, "..") + "/.env" });
+
+// MS: Import v1 routes after dotenv loaded because of its dependency to db that requires to load environment variables
+import errorHandlerMiddleware from "./middleware/error_handler";
+import v1Routes from "./routes/v1_routes";
 
 const app = express();
 

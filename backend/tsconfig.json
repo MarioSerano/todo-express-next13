@@ -3,15 +3,16 @@
     "require": ["tsconfig-paths/register"]
   },
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es5",
+    "target": "es6",
     "outDir": "build",
     "strict": true,
     "paths": {
       "~/*": ["./src/*", "./src"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "*.ts"],
   "exclude": ["node_modules"]
 }
